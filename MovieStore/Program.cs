@@ -1,3 +1,9 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using MovieStore.Models.Domain;
+using MovieStore.Repositories.Implementation;
+using MovieStore.Repositories.Interfaces;
+
 namespace MovieStore
 {
     public class Program
@@ -8,6 +14,17 @@ namespace MovieStore
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+
+            builder.Services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<DataBaseContext>()
+                .AddDefaultTokenProviders();
+
+            builder.Services.AddTransient<IUserAuthenticationService, UserAuthenticationService>();
+
+            //builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/UserAuthentication/Login");
 
             var app = builder.Build();
 
@@ -24,6 +41,7 @@ namespace MovieStore
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
