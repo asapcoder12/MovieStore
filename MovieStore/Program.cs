@@ -24,6 +24,7 @@ namespace MovieStore
 
             builder.Services.AddTransient<IUserAuthenticationService, UserAuthenticationService>();
             builder.Services.AddTransient<IGenreService, GenreService>();
+            builder.Services.AddTransient<IFileService, FileService>();
 
             //builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/UserAuthentication/Login");
 
